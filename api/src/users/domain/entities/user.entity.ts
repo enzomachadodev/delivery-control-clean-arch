@@ -14,6 +14,7 @@ export class UserEntity extends Entity<UserProps> {
     public readonly props: UserProps,
     id?: string,
   ) {
+    UserEntity.validate(props);
     super(props, id);
     this.props.createdAt = this.props.createdAt ?? new Date();
     this.props.updatedAt = this.props.updatedAt ?? new Date();
@@ -50,6 +51,10 @@ export class UserEntity extends Entity<UserProps> {
 
   private set name(value: string) {
     this.props.name = value;
+  }
+
+  private set email(value: string) {
+    this.props.email = value;
   }
 
   private set password(value: string) {
