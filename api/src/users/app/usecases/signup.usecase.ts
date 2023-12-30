@@ -3,6 +3,7 @@ import { HashProvider } from '@/shared/app/providers/hash-provider';
 import { UserEntity } from '@/users/domain/entities/user.entity';
 import { UserRepository } from '@/users/domain/repositories/user.repository';
 import { UserOutput } from '../dtos/user-output';
+import { UseCase as DefaultUseCase } from '@/shared/app/usecases/usecase';
 
 export namespace SignupUseCase {
   export type Input = {
@@ -13,7 +14,7 @@ export namespace SignupUseCase {
 
   export type Output = UserOutput;
 
-  export class UseCase {
+  export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(
       private userRepository: UserRepository,
       private hashProvider: HashProvider,
