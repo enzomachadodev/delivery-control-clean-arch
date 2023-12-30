@@ -10,11 +10,12 @@ export class UserInMemoryRepository
 {
   async findByEmail(email: string): Promise<UserEntity> {
     const entity = this.items.find((item) => item.email === email);
-    if (!entity) throw new NotFoundError('Entity not found');
+    if (!entity)
+      throw new NotFoundError(`Entity not found using email ${email}`);
     return entity;
   }
   async emailExists(email: string): Promise<void> {
     const entity = this.items.find((item) => item.email === email);
-    if (entity) throw new ConflictError('Email is already beign used');
+    if (entity) throw new ConflictError('Email is already being used');
   }
 }
