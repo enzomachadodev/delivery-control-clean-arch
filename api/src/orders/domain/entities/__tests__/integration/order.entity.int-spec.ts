@@ -4,6 +4,32 @@ import { OrderDataBuilder } from '@/orders/domain/testing/helpers/order-data-bui
 
 describe('OrderEntity integration tests', () => {
   describe('Constructor method', () => {
+    it('Should throw an error when creating a order with invalid userId', () => {
+      let props: OrderProps = {
+        ...OrderDataBuilder({}),
+        userId: null,
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+
+      props = {
+        ...OrderDataBuilder({}),
+        userId: '',
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+
+      props = {
+        ...OrderDataBuilder({}),
+        userId: 10 as any,
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+
+      props = {
+        ...OrderDataBuilder({}),
+        userId: 'a',
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+    });
+
     it('Should throw an error when creating a order with invalid customerName', () => {
       let props: OrderProps = {
         ...OrderDataBuilder({}),
@@ -31,28 +57,101 @@ describe('OrderEntity integration tests', () => {
       expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
     });
 
-    it('Should throw an error when creating a order with invalid userId', () => {
+    it('Should throw an error when creating a order with invalid street', () => {
       let props: OrderProps = {
         ...OrderDataBuilder({}),
-        userId: null,
+        street: null,
+      };
+
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+
+      props = {
+        ...OrderDataBuilder({}),
+        street: '',
       };
       expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
 
       props = {
         ...OrderDataBuilder({}),
-        userId: '',
+        street: 10 as any,
       };
       expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
 
       props = {
         ...OrderDataBuilder({}),
-        userId: 10 as any,
+        street: 'a'.repeat(256),
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+    });
+
+    it('Should throw an error when creating an order with invalid number', () => {
+      let props: OrderProps = {
+        ...OrderDataBuilder({}),
+        number: 'invalid' as any,
       };
       expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
 
       props = {
         ...OrderDataBuilder({}),
-        userId: 'a',
+        number: 0,
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+
+      props = {
+        ...OrderDataBuilder({}),
+        number: -1,
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+    });
+
+    it('Should throw an error when creating an order with invalid complement', () => {
+      const props: OrderProps = {
+        ...OrderDataBuilder({}),
+        complement: 'a'.repeat(256),
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+    });
+
+    it('Should throw an error when creating an order with invalid neighborhood', () => {
+      const props: OrderProps = {
+        ...OrderDataBuilder({}),
+        neighborhood: '',
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+    });
+
+    it('Should throw an error when creating an order with invalid city', () => {
+      const props: OrderProps = {
+        ...OrderDataBuilder({}),
+        city: '',
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+    });
+
+    it('Should throw an error when creating an order with invalid state', () => {
+      let props: OrderProps = {
+        ...OrderDataBuilder({}),
+        state: '',
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+
+      props = {
+        ...OrderDataBuilder({}),
+        state: 'ABC',
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+    });
+
+    it('Should throw an error when creating an order with invalid zipCode', () => {
+      let props: OrderProps = {
+        ...OrderDataBuilder({}),
+        zipCode: '',
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+
+      props = {
+        ...OrderDataBuilder({}),
+        zipCode: '12345',
       };
       expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
     });

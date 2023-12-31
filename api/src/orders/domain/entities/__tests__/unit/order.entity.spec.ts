@@ -11,9 +11,22 @@ describe('OrderEntity unit tests', () => {
   });
   it('Constructor method', () => {
     expect(OrderEntity.validate).toHaveBeenCalled();
-    expect(sut.props.customerName).toEqual(props.customerName);
     expect(sut.props.userId).toEqual(props.userId);
+    expect(sut.props.customerName).toEqual(props.customerName);
+    expect(sut.props.street).toEqual(props.street);
+    expect(sut.props.number).toEqual(props.number);
+    expect(sut.props.complement).toEqual(props.complement);
+    expect(sut.props.neighborhood).toEqual(props.neighborhood);
+    expect(sut.props.city).toEqual(props.city);
+    expect(sut.props.state).toEqual(props.state);
+    expect(sut.props.zipCode).toEqual(props.zipCode);
     expect(sut.props.createdAt).toEqual(expect.any(Date));
+  });
+
+  it('Getter of userId field', () => {
+    expect(sut.userId).toBeDefined();
+    expect(sut.userId).toEqual(props.userId);
+    expect(typeof sut.userId).toBe('string');
   });
 
   it('Getter of customerName field', () => {
@@ -22,10 +35,48 @@ describe('OrderEntity unit tests', () => {
     expect(typeof sut.customerName).toBe('string');
   });
 
-  it('Getter of userId field', () => {
-    expect(sut.userId).toBeDefined();
-    expect(sut.userId).toEqual(props.userId);
-    expect(typeof sut.userId).toBe('string');
+  it('Getter of street field', () => {
+    expect(sut.street).toBeDefined();
+    expect(sut.street).toEqual(props.street);
+    expect(typeof sut.street).toBe('string');
+  });
+
+  it('Getter of number field', () => {
+    expect(sut.number).toBeDefined();
+    expect(sut.number).toEqual(props.number);
+    expect(typeof sut.number).toBe('number');
+  });
+
+  it('Getter of complement field', () => {
+    expect(sut.complement).toBeDefined();
+    expect(sut.complement).toEqual(props.complement);
+    expect(typeof sut.complement === 'string' || sut.complement === null).toBe(
+      true,
+    );
+  });
+
+  it('Getter of neighborhood field', () => {
+    expect(sut.neighborhood).toBeDefined();
+    expect(sut.neighborhood).toEqual(props.neighborhood);
+    expect(typeof sut.neighborhood).toBe('string');
+  });
+
+  it('Getter of city field', () => {
+    expect(sut.city).toBeDefined();
+    expect(sut.city).toEqual(props.city);
+    expect(typeof sut.city).toBe('string');
+  });
+
+  it('Getter of state field', () => {
+    expect(sut.state).toBeDefined();
+    expect(sut.state).toEqual(props.state);
+    expect(typeof sut.state).toBe('string');
+  });
+
+  it('Getter of zipCode field', () => {
+    expect(sut.zipCode).toBeDefined();
+    expect(sut.zipCode).toEqual(props.zipCode);
+    expect(typeof sut.zipCode).toBe('string');
   });
 
   it('Getter of createdAt field', () => {
