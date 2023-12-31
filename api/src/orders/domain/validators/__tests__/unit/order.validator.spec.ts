@@ -158,6 +158,21 @@ describe('OrderValidator unit tests', () => {
     ]);
   });
 
+  it('Invalidation cases for currentStatus field', () => {
+    let isValid = sut.validate({ ...props, currentStatus: '' as any });
+    expect(isValid).toBeFalsy();
+    expect(sut.errors['currentStatus']).toStrictEqual([
+      'currentStatus must be a OrderStatus',
+      'currentStatus should not be empty',
+    ]);
+
+    isValid = sut.validate({ ...props, currentStatus: '12345' as any });
+    expect(isValid).toBeFalsy();
+    expect(sut.errors['currentStatus']).toStrictEqual([
+      'currentStatus must be a OrderStatus',
+    ]);
+  });
+
   it('Invalidation cases for createdAt field', () => {
     let isValid = sut.validate({ ...props, createdAt: 10 as any });
     expect(isValid).toBeFalsy();
@@ -169,6 +184,20 @@ describe('OrderValidator unit tests', () => {
     expect(isValid).toBeFalsy();
     expect(sut.errors['createdAt']).toStrictEqual([
       'createdAt must be a Date instance',
+    ]);
+  });
+
+  it('Invalidation cases for updatedAt field', () => {
+    let isValid = sut.validate({ ...props, updatedAt: 10 as any });
+    expect(isValid).toBeFalsy();
+    expect(sut.errors['updatedAt']).toStrictEqual([
+      'updatedAt must be a Date instance',
+    ]);
+
+    isValid = sut.validate({ ...props, updatedAt: '2023' as any });
+    expect(isValid).toBeFalsy();
+    expect(sut.errors['updatedAt']).toStrictEqual([
+      'updatedAt must be a Date instance',
     ]);
   });
 

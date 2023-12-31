@@ -1,3 +1,4 @@
+import { OrderStatus } from '@/status-history/domain/entities/status-history.entity';
 import { OrderEntity, OrderProps } from '../../order.entity';
 import { OrderDataBuilder } from '@/orders/domain/testing/helpers/order-data-builder';
 
@@ -20,6 +21,8 @@ describe('OrderEntity unit tests', () => {
     expect(sut.props.city).toEqual(props.city);
     expect(sut.props.state).toEqual(props.state);
     expect(sut.props.zipCode).toEqual(props.zipCode);
+    expect(sut.props.currentStatus).toEqual(props.currentStatus);
+    expect(sut.props.createdAt).toEqual(expect.any(Date));
     expect(sut.props.createdAt).toEqual(expect.any(Date));
   });
 
@@ -79,8 +82,25 @@ describe('OrderEntity unit tests', () => {
     expect(typeof sut.zipCode).toBe('string');
   });
 
+  it('Getter of currentStatus field', () => {
+    expect(sut.currentStatus).toBeDefined();
+    expect(sut.currentStatus).toEqual(props.currentStatus);
+    expect(typeof sut.currentStatus).toBe('string');
+  });
+
   it('Getter of createdAt field', () => {
     expect(sut.createdAt).toBeDefined();
     expect(sut.createdAt).toBeInstanceOf(Date);
+  });
+
+  it('Getter of updatedAt field', () => {
+    expect(sut.updatedAt).toBeDefined();
+    expect(sut.updatedAt).toBeInstanceOf(Date);
+  });
+
+  it('Should update currentStatus', () => {
+    expect(OrderEntity.validate).toHaveBeenCalled();
+    sut.updateStatus(OrderStatus[3] as any);
+    expect(sut.props.currentStatus).toEqual(OrderStatus[3]);
   });
 });

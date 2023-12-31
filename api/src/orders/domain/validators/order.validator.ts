@@ -10,9 +10,26 @@ import {
   Length,
   Matches,
   MaxLength,
+  Validate,
+  ValidationArguments,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
 } from 'class-validator';
 import { ClassValidatorFields } from '@/shared/domain/validators/class-validator-fields';
 import { OrderProps } from '../entities/order.entity';
+import { OrderStatus } from '@/status-history/domain/entities/status-history.entity';
+
+@ValidatorConstraint({ name: 'IsOrderStatus', async: false })
+export class IsOrderStatusValidator implements ValidatorConstraintInterface {
+  //eslint-disable-next-line
+  validate(name: any, args: ValidationArguments) {
+    return Object.values(OrderStatus).includes(name);
+  }
+
+  defaultMessage(args: ValidationArguments) {
+    return `${args.property} must be a OrderStatus`;
+  }
+}
 
 export class OrderRules {
   @IsString()
@@ -63,9 +80,18 @@ export class OrderRules {
   })
   zipCode: string;
 
+  @IsString()
+  @IsNotEmpty()
+  @Validate(IsOrderStatusValidator)
+  currentStatus: OrderStatus;
+
   @IsDate()
   @IsOptional()
   createdAt?: Date;
+
+  @IsDate()
+  @IsOptional()
+  updatedAt?: Date;
 
   constructor({
     userId,
@@ -77,7 +103,9 @@ export class OrderRules {
     city,
     state,
     zipCode,
+    currentStatus,
     createdAt,
+    updatedAt,
   }: OrderProps) {
     Object.assign(this, {
       userId,
@@ -89,7 +117,9 @@ export class OrderRules {
       city,
       state,
       zipCode,
+      currentStatus,
       createdAt,
+      updatedAt,
     });
   }
 }

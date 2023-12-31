@@ -1,6 +1,7 @@
 import { EntityValidationError } from '@/shared/domain/errors/validation-error';
 import { OrderEntity, OrderProps } from '../../order.entity';
 import { OrderDataBuilder } from '@/orders/domain/testing/helpers/order-data-builder';
+import { OrderStatus } from '@/status-history/domain/entities/status-history.entity';
 
 describe('OrderEntity integration tests', () => {
   describe('Constructor method', () => {
@@ -156,6 +157,20 @@ describe('OrderEntity integration tests', () => {
       expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
     });
 
+    it('Should throw an error when creating an order with invalid currentStatus', () => {
+      let props: OrderProps = {
+        ...OrderDataBuilder({}),
+        currentStatus: '' as any,
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+
+      props = {
+        ...OrderDataBuilder({}),
+        currentStatus: '12345' as any,
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+    });
+
     it('Should throw an error when creating a user with invalid createdAt', () => {
       let props: OrderProps = {
         ...OrderDataBuilder({}),
@@ -170,13 +185,55 @@ describe('OrderEntity integration tests', () => {
       expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
     });
 
+    it('Should throw an error when creating a user with invalid updatedAt', () => {
+      let props: OrderProps = {
+        ...OrderDataBuilder({}),
+        updatedAt: '2023' as any,
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+
+      props = {
+        ...OrderDataBuilder({}),
+        updatedAt: 10 as any,
+      };
+      expect(() => new OrderEntity(props)).toThrow(EntityValidationError);
+    });
+
     it('Should a valid order', () => {
       expect.assertions(0);
 
       const props: OrderProps = {
         ...OrderDataBuilder({}),
       };
+
       new OrderEntity(props);
+    });
+  });
+
+  describe('Update status method', () => {
+    it('Should throw an error when update status with invalid status', () => {
+      const entity = new OrderEntity(OrderDataBuilder({}));
+      expect(() => entity.updateStatus(null)).toThrow(EntityValidationError);
+      expect(() => entity.updateStatus('' as any)).toThrow(
+        EntityValidationError,
+      );
+      expect(() => entity.updateStatus(10 as any)).toThrow(
+        EntityValidationError,
+      );
+      expect(() => entity.updateStatus('a' as any)).toThrow(
+        EntityValidationError,
+      );
+    });
+
+    it('Should a valid order', () => {
+      expect.assertions(0);
+
+      const props: OrderProps = {
+        ...OrderDataBuilder({}),
+      };
+
+      const entity = new OrderEntity(props);
+      entity.updateStatus(OrderStatus[4] as any);
     });
   });
 });

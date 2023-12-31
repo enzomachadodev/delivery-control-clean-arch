@@ -1,6 +1,7 @@
 import { Entity } from '@/shared/domain/entities/entity';
 import { EntityValidationError } from '@/shared/domain/errors/validation-error';
 import { OrderValidatorFactory } from '../validators/order.validator';
+import { OrderStatus } from '@/status-history/domain/entities/status-history.entity';
 
 export type OrderProps = {
   userId: string;
@@ -12,7 +13,9 @@ export type OrderProps = {
   city: string;
   state: string;
   zipCode: string;
+  currentStatus: OrderStatus;
   createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export class OrderEntity extends Entity<OrderProps> {
@@ -24,6 +27,15 @@ export class OrderEntity extends Entity<OrderProps> {
     super(props, id);
     this.props.complement = this.props.complement ?? null;
     this.props.createdAt = this.props.createdAt ?? new Date();
+    this.props.updatedAt = this.props.updatedAt ?? new Date();
+  }
+
+  updateStatus(value: OrderStatus): void {
+    OrderEntity.validate({
+      ...this.props,
+      currentStatus: value,
+    });
+    this.currentStatus = value;
   }
 
   get userId() {
@@ -62,8 +74,20 @@ export class OrderEntity extends Entity<OrderProps> {
     return this.props.zipCode;
   }
 
+  get currentStatus() {
+    return this.props.currentStatus;
+  }
+
   get createdAt() {
     return this.props.createdAt;
+  }
+
+  get updatedAt() {
+    return this.props.updatedAt;
+  }
+
+  private set currentStatus(value: OrderStatus) {
+    this.props.currentStatus = value;
   }
 
   static validate(props: OrderProps) {
