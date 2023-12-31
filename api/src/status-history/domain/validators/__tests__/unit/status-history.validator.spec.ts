@@ -1,46 +1,48 @@
-import { StatusProps } from '@/status/domain/entities/status.entity';
+import { StatusHistoryProps } from '@/status-history/domain/entities/status-history.entity';
 import {
   StatusRules,
   StatusValidator,
   StatusValidatorFactory,
-} from '../../status.validator';
-import { StatusDataBuilder } from '@/status/domain/testing/helpers/status-data-builder';
+} from '../../status-history.validator';
+import { StatusHistoryDataBuilder } from '@/status-history/domain/testing/helpers/status-history-data-builder';
 
 let sut: StatusValidator;
-let props: StatusProps;
+let props: StatusHistoryProps;
 
 describe('StatusValidator unit tests', () => {
   beforeEach(() => {
     sut = StatusValidatorFactory.create();
-    props = StatusDataBuilder({});
+    props = StatusHistoryDataBuilder({});
   });
 
-  it('Invalidation cases for name field', () => {
+  it('Invalidation cases for status field', () => {
     let isValid = sut.validate(null as any);
     expect(isValid).toBeFalsy();
-    expect(sut.errors['name']).toStrictEqual([
-      'name should not be empty',
-      'name must be a StatusOption',
-      'name must be a string',
+    expect(sut.errors['status']).toStrictEqual([
+      'status should not be empty',
+      'status must be a OrderStatus',
+      'status must be a string',
     ]);
 
-    isValid = sut.validate({ ...props, name: '' as any });
+    isValid = sut.validate({ ...props, status: '' as any });
     expect(isValid).toBeFalsy();
-    expect(sut.errors['name']).toStrictEqual([
-      'name should not be empty',
-      'name must be a StatusOption',
+    expect(sut.errors['status']).toStrictEqual([
+      'status should not be empty',
+      'status must be a OrderStatus',
     ]);
 
-    isValid = sut.validate({ ...props, name: 10 as any });
+    isValid = sut.validate({ ...props, status: 10 as any });
     expect(isValid).toBeFalsy();
-    expect(sut.errors['name']).toStrictEqual([
-      'name must be a StatusOption',
-      'name must be a string',
+    expect(sut.errors['status']).toStrictEqual([
+      'status must be a OrderStatus',
+      'status must be a string',
     ]);
 
-    isValid = sut.validate({ ...props, name: 'a' as any });
+    isValid = sut.validate({ ...props, status: 'a' as any });
     expect(isValid).toBeFalsy();
-    expect(sut.errors['name']).toStrictEqual(['name must be a StatusOption']);
+    expect(sut.errors['status']).toStrictEqual([
+      'status must be a OrderStatus',
+    ]);
   });
 
   it('Invalidation cases for orderId field', () => {

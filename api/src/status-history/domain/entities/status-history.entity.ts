@@ -1,8 +1,8 @@
 import { Entity } from '@/shared/domain/entities/entity';
 import { EntityValidationError } from '@/shared/domain/errors/validation-error';
-import { StatusValidatorFactory } from '../validators/status.validator';
+import { StatusValidatorFactory } from '../validators/status-history.validator';
 
-export enum StatusOption {
+export enum OrderStatus {
   CONFIRMED,
   PROCESSING,
   DISPATCHED,
@@ -10,35 +10,35 @@ export enum StatusOption {
   CANCELED,
 }
 
-export type StatusProps = {
-  name: StatusOption;
+export type StatusHistoryProps = {
+  status: OrderStatus;
   orderId: string;
   createdAt?: Date;
 };
 
-export class StatusEntity extends Entity<StatusProps> {
+export class StatusHistoryEntity extends Entity<StatusHistoryProps> {
   constructor(
-    public readonly props: StatusProps,
+    public readonly props: StatusHistoryProps,
     id?: string,
   ) {
-    StatusEntity.validate(props);
+    StatusHistoryEntity.validate(props);
     super(props, id);
     this.props.createdAt = this.props.createdAt ?? new Date();
-  }
-
-  get name() {
-    return this.props.name;
   }
 
   get orderId() {
     return this.props.orderId;
   }
 
+  get status() {
+    return this.props.status;
+  }
+
   get createdAt() {
     return this.props.createdAt;
   }
 
-  static validate(props: StatusProps) {
+  static validate(props: StatusHistoryProps) {
     const validator = StatusValidatorFactory.create();
     const isValid = validator.validate(props);
     if (!isValid) throw new EntityValidationError(validator.errors);

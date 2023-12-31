@@ -10,25 +10,28 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 import { ClassValidatorFields } from '@/shared/domain/validators/class-validator-fields';
-import { StatusOption, StatusProps } from '../entities/status.entity';
+import {
+  OrderStatus,
+  StatusHistoryProps,
+} from '../entities/status-history.entity';
 
-@ValidatorConstraint({ name: 'IsStatusOption', async: false })
-export class IsStatusOptionValidator implements ValidatorConstraintInterface {
+@ValidatorConstraint({ name: 'IsOrderStatus', async: false })
+export class IsOrderStatusValidator implements ValidatorConstraintInterface {
   // eslint-disable-next-line
   validate(name: any, args: ValidationArguments) {
-    return Object.values(StatusOption).includes(name);
+    return Object.values(OrderStatus).includes(name);
   }
 
   defaultMessage(args: ValidationArguments) {
-    return `${args.property} must be a StatusOption`;
+    return `${args.property} must be a OrderStatus`;
   }
 }
 
 export class StatusRules {
   @IsString()
-  @Validate(IsStatusOptionValidator)
+  @Validate(IsOrderStatusValidator)
   @IsNotEmpty()
-  name: StatusOption;
+  status: OrderStatus;
 
   @IsString()
   @IsUUID()
@@ -39,14 +42,14 @@ export class StatusRules {
   @IsOptional()
   createdAt?: Date;
 
-  constructor({ name, orderId, createdAt }: StatusProps) {
-    Object.assign(this, { name, orderId, createdAt });
+  constructor({ status, orderId, createdAt }: StatusHistoryProps) {
+    Object.assign(this, { status, orderId, createdAt });
   }
 }
 
 export class StatusValidator extends ClassValidatorFields<StatusRules> {
-  validate(data: StatusProps): boolean {
-    return super.validate(new StatusRules(data || ({} as StatusProps)));
+  validate(data: StatusHistoryProps): boolean {
+    return super.validate(new StatusRules(data || ({} as StatusHistoryProps)));
   }
 }
 
