@@ -10,4 +10,18 @@ export class StatusHistoryInMemoryRepository
     const entities = this.items.filter((item) => item.orderId === orderId);
     return entities;
   }
+
+  async deleteManyByOrderId(orderId: string): Promise<void> {
+    const indexesToDelete: number[] = [];
+
+    this.items.forEach((item, index) => {
+      if (item.orderId === orderId) {
+        indexesToDelete.push(index);
+      }
+    });
+
+    indexesToDelete.reverse().forEach((index) => {
+      this.items.splice(index, 1);
+    });
+  }
 }
