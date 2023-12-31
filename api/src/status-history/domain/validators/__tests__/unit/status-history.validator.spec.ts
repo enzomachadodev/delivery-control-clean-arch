@@ -1,17 +1,17 @@
 import { StatusHistoryProps } from '@/status-history/domain/entities/status-history.entity';
 import {
   StatusRules,
-  StatusValidator,
-  StatusValidatorFactory,
+  StatusHistoryValidator,
+  StatusHistoryValidatorFactory,
 } from '../../status-history.validator';
 import { StatusHistoryDataBuilder } from '@/status-history/domain/testing/helpers/status-history-data-builder';
 
-let sut: StatusValidator;
+let sut: StatusHistoryValidator;
 let props: StatusHistoryProps;
 
-describe('StatusValidator unit tests', () => {
+describe('StatusHistoryValidator unit tests', () => {
   beforeEach(() => {
-    sut = StatusValidatorFactory.create();
+    sut = StatusHistoryValidatorFactory.create();
     props = StatusHistoryDataBuilder({});
   });
 
@@ -21,7 +21,6 @@ describe('StatusValidator unit tests', () => {
     expect(sut.errors['status']).toStrictEqual([
       'status should not be empty',
       'status must be a OrderStatus',
-      'status must be a string',
     ]);
 
     isValid = sut.validate({ ...props, status: '' as any });
@@ -35,7 +34,6 @@ describe('StatusValidator unit tests', () => {
     expect(isValid).toBeFalsy();
     expect(sut.errors['status']).toStrictEqual([
       'status must be a OrderStatus',
-      'status must be a string',
     ]);
 
     isValid = sut.validate({ ...props, status: 'a' as any });

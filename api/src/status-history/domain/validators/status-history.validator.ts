@@ -16,7 +16,9 @@ import {
 } from '../entities/status-history.entity';
 
 @ValidatorConstraint({ name: 'IsOrderStatus', async: false })
-export class IsOrderStatusValidator implements ValidatorConstraintInterface {
+export class IsOrderStatusHistoryValidator
+  implements ValidatorConstraintInterface
+{
   // eslint-disable-next-line
   validate(name: any, args: ValidationArguments) {
     return Object.values(OrderStatus).includes(name);
@@ -29,32 +31,31 @@ export class IsOrderStatusValidator implements ValidatorConstraintInterface {
 
 export class StatusRules {
   @IsString()
-  @Validate(IsOrderStatusValidator)
-  @IsNotEmpty()
-  status: OrderStatus;
-
-  @IsString()
   @IsUUID()
   @IsNotEmpty()
   orderId: string;
+
+  @Validate(IsOrderStatusHistoryValidator)
+  @IsNotEmpty()
+  status: OrderStatus;
 
   @IsDate()
   @IsOptional()
   createdAt?: Date;
 
-  constructor({ status, orderId, createdAt }: StatusHistoryProps) {
-    Object.assign(this, { status, orderId, createdAt });
+  constructor({ orderId, status, createdAt }: StatusHistoryProps) {
+    Object.assign(this, { orderId, status, createdAt });
   }
 }
 
-export class StatusValidator extends ClassValidatorFields<StatusRules> {
+export class StatusHistoryValidator extends ClassValidatorFields<StatusRules> {
   validate(data: StatusHistoryProps): boolean {
     return super.validate(new StatusRules(data || ({} as StatusHistoryProps)));
   }
 }
 
-export class StatusValidatorFactory {
-  static create(): StatusValidator {
-    return new StatusValidator();
+export class StatusHistoryValidatorFactory {
+  static create(): StatusHistoryValidator {
+    return new StatusHistoryValidator();
   }
 }

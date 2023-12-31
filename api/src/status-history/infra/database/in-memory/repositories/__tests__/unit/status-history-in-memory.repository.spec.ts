@@ -15,4 +15,15 @@ describe('StatusHistoryInMemoryRepository unit tests', () => {
     const result = await sut.findByOrderId(entity.orderId);
     expect([entity]).toStrictEqual(result);
   });
+
+  it('Should delete status by orderId - deleteManyByOrderId method', async () => {
+    const entity1 = new StatusHistoryEntity(StatusHistoryDataBuilder({}));
+    const entity2 = new StatusHistoryEntity(StatusHistoryDataBuilder({}));
+    await sut.insert(entity1);
+    await sut.insert(entity1);
+    await sut.insert(entity1);
+    await sut.insert(entity2);
+    await sut.deleteManyByOrderId(entity1.orderId);
+    expect(sut.items).toStrictEqual([entity2]);
+  });
 });

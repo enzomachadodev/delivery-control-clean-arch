@@ -1,6 +1,6 @@
 import { Entity } from '@/shared/domain/entities/entity';
 import { EntityValidationError } from '@/shared/domain/errors/validation-error';
-import { StatusValidatorFactory } from '../validators/status-history.validator';
+import { StatusHistoryValidatorFactory } from '../validators/status-history.validator';
 
 export enum OrderStatus {
   CONFIRMED,
@@ -39,7 +39,7 @@ export class StatusHistoryEntity extends Entity<StatusHistoryProps> {
   }
 
   static validate(props: StatusHistoryProps) {
-    const validator = StatusValidatorFactory.create();
+    const validator = StatusHistoryValidatorFactory.create();
     const isValid = validator.validate(props);
     if (!isValid) throw new EntityValidationError(validator.errors);
   }
