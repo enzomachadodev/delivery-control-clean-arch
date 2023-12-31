@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  db:
+    build: .
+    container_name: api-db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=projectdb
