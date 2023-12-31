@@ -9,3 +9,57 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum OrderStatus {
+  CONFIRMED
+  PROCESSING
+  DISPATCHED
+  DELIVERED
+  CANCELED
+}
+
+model User {
+  id        String   @id @db.Uuid
+  name      String   @db.VarChar(255)
+  email     String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  orders Order[]
+
+  @@map("users")
+}
+
+model Order {
+  id            String      @id @db.Uuid
+  customerName  String      @map("customer_name") @db.VarChar(255)
+  street        String      @db.VarChar(255)
+  number        Int         @db.Integer()
+  complement    String?     @db.VarChar(255)
+  neighborhood  String      @db.VarChar(255)
+  city          String      @db.VarChar(255)
+  state         String      @db.VarChar(255)
+  zipCode       String      @map("zip_code") @db.VarChar(20)
+  currentStatus OrderStatus @map("current_status")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt() @map("updated_at")
+
+  statusHistory StatusHistory[]
+
+  User   User   @relation(fields: [userId], references: [id])
+  userId String @db.Uuid
+
+  @@map("orders")
+}
+
+model StatusHistory {
+  id        String      @id @db.Uuid
+  status    OrderStatus
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  Order   Order  @relation(fields: [orderId], references: [id])
+  orderId String @db.Uuid
+
+  @@map("status_history")
+}
