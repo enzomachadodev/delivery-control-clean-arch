@@ -100,7 +100,7 @@ describe('OrderEntity unit tests', () => {
 
   it('Should update currentStatus', () => {
     expect(OrderEntity.validate).toHaveBeenCalled();
-    sut.updateStatus(OrderStatus[3] as any);
-    expect(sut.props.currentStatus).toEqual(OrderStatus[3]);
+    sut.updateStatus(OrderStatus.DISPATCHED);
+    expect(sut.props.currentStatus).toEqual(OrderStatus.DISPATCHED);
   });
 });

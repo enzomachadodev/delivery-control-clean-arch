@@ -28,7 +28,7 @@ export function OrderDataBuilder(props: Props): OrderProps {
     city: props.city ?? faker.location.city(),
     state: props.state ?? faker.location.state({ abbreviated: true }),
     zipCode: props.zipCode ?? '01311-000',
-    currentStatus: props.currentStatus ?? (OrderStatus[0] as any),
+    currentStatus: props.currentStatus ?? OrderStatus.CONFIRMED,
     createdAt: props.createdAt ?? new Date(),
     updatedAt: props.updatedAt ?? new Date(),
   };

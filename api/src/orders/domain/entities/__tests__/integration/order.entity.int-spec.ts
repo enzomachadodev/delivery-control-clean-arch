@@ -233,7 +233,7 @@ describe('OrderEntity integration tests', () => {
       };
 
       const entity = new OrderEntity(props);
-      entity.updateStatus(OrderStatus[4] as any);
+      entity.updateStatus(OrderStatus.DELIVERED);
     });
   });
 });
