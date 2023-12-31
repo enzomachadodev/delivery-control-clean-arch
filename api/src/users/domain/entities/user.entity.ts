@@ -30,6 +30,14 @@ export class UserEntity extends Entity<UserProps> {
     this.props.updatedAt = new Date();
   }
 
+  updatePassword(value: string): void {
+    UserEntity.validate({
+      ...this.props,
+      password: value,
+    });
+    this.password = value;
+  }
+
   get name() {
     return this.props.name;
   }
