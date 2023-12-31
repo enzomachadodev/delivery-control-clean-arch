@@ -20,7 +20,9 @@ import { OrderProps } from '../entities/order.entity';
 import { OrderStatus } from '@/status-history/domain/entities/status-history.entity';
 
 @ValidatorConstraint({ name: 'IsOrderStatus', async: false })
-export class IsOrderStatusValidator implements ValidatorConstraintInterface {
+export class IsOrderStatusHistoryValidator
+  implements ValidatorConstraintInterface
+{
   //eslint-disable-next-line
   validate(name: any, args: ValidationArguments) {
     return Object.values(OrderStatus).includes(name);
@@ -80,9 +82,8 @@ export class OrderRules {
   })
   zipCode: string;
 
-  @IsString()
   @IsNotEmpty()
-  @Validate(IsOrderStatusValidator)
+  @Validate(IsOrderStatusHistoryValidator)
   currentStatus: OrderStatus;
 
   @IsDate()

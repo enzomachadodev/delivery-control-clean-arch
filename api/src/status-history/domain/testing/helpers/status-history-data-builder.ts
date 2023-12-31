@@ -12,7 +12,7 @@ type Props = {
 export function StatusHistoryDataBuilder(props: Props): StatusHistoryProps {
   return {
     orderId: props.orderId ?? randomUUID(),
-    status: props.status ?? OrderStatus.DISPATCHED,
+    status: props.status ?? OrderStatus.DELIVERED,
     createdAt: props.createdAt ?? new Date(),
   };
 }

@@ -22,7 +22,7 @@ describe('StatusHistoryEntity unit tests', () => {
   it('Getter of status field', () => {
     expect(sut.status).toBeDefined();
     expect(sut.status).toEqual(props.status);
-    expect(typeof sut.status).toBe('string');
+    expect(typeof sut.status).toBe('number');
   });
 
   it('Getter of orderId field', () => {
