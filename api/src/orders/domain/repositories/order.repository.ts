@@ -1,6 +1,7 @@
-import { RepositoryInterface } from '@/shared/domain/repositories/repository-contracts';
 import { OrderEntity } from '../entities/order.entity';
+import { SearchableRepositoryInterface } from '@/shared/domain/repositories/searchable-repository-contracts';
 
-export interface OrderRepository extends RepositoryInterface<OrderEntity> {
+export interface OrderRepository
+  extends SearchableRepositoryInterface<OrderEntity, any, any> {
   findByUserId(userId: string): Promise<OrderEntity[]>;
 }

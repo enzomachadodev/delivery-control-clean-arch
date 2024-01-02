@@ -1,9 +1,9 @@
 import { OrderEntity } from '@/orders/domain/entities/order.entity';
 import { OrderRepository } from '@/orders/domain/repositories/order.repository';
-import { InMemoryRepository } from '@/shared/domain/repositories/in-memory.repository';
+import { InMemorySearchableRepository } from '@/shared/domain/repositories/in-memory-searchable.repository';
 
 export class OrderInMemoryRepository
-  extends InMemoryRepository<OrderEntity>
+  extends InMemorySearchableRepository<OrderEntity>
   implements OrderRepository
 {
   async findByUserId(userId: string): Promise<OrderEntity[]> {
