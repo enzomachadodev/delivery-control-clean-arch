@@ -1,7 +1,23 @@
 import { OrderEntity } from '../entities/order.entity';
-import { SearchableRepositoryInterface } from '@/shared/domain/repositories/searchable-repository-contracts';
+import {
+  SearchParams as DefaultSearchParams,
+  SearchResult as DefaultSearchResult,
+  SearchableRepositoryInterface,
+} from '@/shared/domain/repositories/searchable-repository-contracts';
 
-export interface OrderRepository
-  extends SearchableRepositoryInterface<OrderEntity, any, any> {
-  findByUserId(userId: string): Promise<OrderEntity[]>;
+export namespace OrderRepository {
+  export type Filter = string;
+
+  export class SearchParams extends DefaultSearchParams {}
+
+  export class SearchResult extends DefaultSearchResult<OrderEntity, Filter> {}
+  export interface Repository
+    extends SearchableRepositoryInterface<
+      OrderEntity,
+      Filter,
+      SearchParams,
+      SearchResult
+    > {
+    findByUserId(userId: string): Promise<OrderEntity[]>;
+  }
 }
