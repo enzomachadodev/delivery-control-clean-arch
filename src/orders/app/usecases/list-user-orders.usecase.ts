@@ -5,7 +5,7 @@ import {
   PaginationOutput,
   PaginationOutputMapper,
 } from '@/shared/app/dtos/pagination-output';
-import { OrderOutput } from '../dtos/order-output';
+import { OrderOutput, OrderOutputMapper } from '../dtos/order-output';
 
 export namespace ListUserOrdersUseCase {
   export type Input = {
@@ -28,7 +28,10 @@ export namespace ListUserOrdersUseCase {
     }
 
     private toOutput(searchResult: OrderRepository.SearchResult): Output {
-      const { items } = searchResult;
+      const items = searchResult.items.map((item) =>
+        OrderOutputMapper.toOutput(item),
+      );
+
       return PaginationOutputMapper.toOutput(items, searchResult);
     }
   }
