@@ -10,7 +10,7 @@ export namespace ListUserOrdersUseCase {
   export type Output = OrderOutput[];
 
   export class UseCase implements DefaultUseCase<Input, Output> {
-    constructor(private orderRepository: OrderRepository) {}
+    constructor(private orderRepository: OrderRepository.Repository) {}
     execute(input: Input): Promise<Output> {
       return this.orderRepository.findByUserId(input.userId);
     }

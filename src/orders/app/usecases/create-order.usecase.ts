@@ -27,7 +27,7 @@ export namespace CreateOrderUseCase {
 
   export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(
-      private orderRepository: OrderRepository,
+      private orderRepository: OrderRepository.Repository,
       private userRepository: UserRepository,
       private statusHistoryRepository: StatusHistoryRepository,
     ) {}
