@@ -18,6 +18,6 @@ export namespace OrderRepository {
       SearchParams,
       SearchResult
     > {
-    findByUserId(userId: string): Promise<OrderEntity[]>;
+    findByUserId(userId: string, params: SearchParams): Promise<SearchResult>;
   }
 }
