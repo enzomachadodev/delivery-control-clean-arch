@@ -18,6 +18,8 @@ import { SigninUseCase } from '../app/usecases/signin.usecase';
 import { UpdateUserPasswordUseCase } from '../app/usecases/update-user-password.usecase';
 import { UpdateUserUseCase } from '../app/usecases/update-user.usecase';
 import { SigninDto } from './dtos/signin.dto';
+import { UserOutput } from '../app/dtos/user-output';
+import { UserPresenter } from './presenters/user.presenter';
 
 @Controller('users')
 export class UsersController {
@@ -39,9 +41,14 @@ export class UsersController {
   @Inject(GetUserUseCase.UseCase)
   private getUserUseCase: GetUserUseCase.UseCase;
 
+  static userToResponse(output: UserOutput) {
+    return new UserPresenter(output);
+  }
+
   @Post()
   async create(@Body() signupDto: SignupDto) {
-    return this.signupUseCase.execute(signupDto);
+    const output = await this.signupUseCase.execute(signupDto);
+    return UsersController.userToResponse(output);
   }
 
   @HttpCode(200)
