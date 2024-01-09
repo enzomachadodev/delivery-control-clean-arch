@@ -1,10 +1,13 @@
 import { UseCase as DefaultUseCase } from '@/shared/app/usecases/usecase';
 import { OrderRepository } from '@/orders/domain/repositories/order.repository';
 import { StatusHistoryRepository } from '@/status-history/domain/repositories/status-history.repository';
+import { BadRequestError } from '@/shared/app/errors/bad-request-error';
+import { UnauthorizedError } from '@/shared/app/errors/unauthorized-error';
 
 export namespace DeleteOrderUseCase {
   export type Input = {
-    id: string;
+    userId: string;
+    orderId: string;
   };
 
   export type Output = void;
@@ -16,8 +19,18 @@ export namespace DeleteOrderUseCase {
     ) {}
 
     async execute(input: Input): Promise<Output> {
-      await this.statusHistoryRepository.deleteManyByOrderId(input.id);
-      await this.orderRepository.delete(input.id);
+      const { orderId, userId } = input;
+      if (!userId) {
+        throw new BadRequestError('Input data not provided');
+      }
+
+      const orderEntity = await this.orderRepository.findById(orderId);
+
+      if (orderEntity.userId !== userId)
+        throw new UnauthorizedError('Insufficient permission');
+
+      await this.statusHistoryRepository.deleteManyByOrderId(orderId);
+      await this.orderRepository.delete(orderId);
     }
   }
 }
