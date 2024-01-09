@@ -19,6 +19,9 @@ import {
   ListUserOrdersDto,
   UpdateOrderStatusDto,
 } from './dtos';
+import { OrderOutput } from '../app/dtos/order-output';
+import { OrderPresenter } from './presenters/order.presenter';
+import { OrderCollectionPresenter } from './presenters/order-collection.presenter';
 
 @Controller('orders')
 export class OrdersController {
@@ -37,40 +40,57 @@ export class OrdersController {
   @Inject(DeleteOrderUseCase.UseCase)
   private deleteOrderUseCase: DeleteOrderUseCase.UseCase;
 
+  static orderToResponse(output: OrderOutput) {
+    return new OrderPresenter(output);
+  }
+
+  static listOrdersToResponse(output: ListUserOrdersUseCase.Output) {
+    return new OrderCollectionPresenter(output);
+  }
+
   @Post()
-  create(@Body() createOrderDto: CreateOrderDto) {
+  async create(@Body() createOrderDto: CreateOrderDto) {
     const userId = 'string';
-    console.log(this.createOrderUseCase, '@@@@@@@@@@@@2');
-    return this.createOrderUseCase.execute({ ...createOrderDto, userId });
+    const output = await this.createOrderUseCase.execute({
+      ...createOrderDto,
+      userId,
+    });
+    return OrdersController.orderToResponse(output);
   }
 
   @Get()
-  findByUser(@Query() searchParams: ListUserOrdersDto) {
+  async findByUser(@Query() searchParams: ListUserOrdersDto) {
     const userId = 'string';
-    return this.listUserOrdersUseCase.execute({ userId, ...searchParams });
+    const output = await this.listUserOrdersUseCase.execute({
+      userId,
+      ...searchParams,
+    });
+    return OrdersController.listOrdersToResponse(output);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     const userId = 'string';
-    return this.getOrderUseCase.execute({ id, userId });
+    const output = await this.getOrderUseCase.execute({ id, userId });
+    return OrdersController.orderToResponse(output);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateOrderDto: UpdateOrderStatusDto,
   ) {
     const userId = 'string';
-    return this.updateOrderStatusUseCase.execute({
+    const output = await this.updateOrderStatusUseCase.execute({
       userId,
       orderId: id,
       status: updateOrderDto.status,
     });
+    return OrdersController.orderToResponse(output);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     const userId = 'string';
     return this.deleteOrderUseCase.execute({ orderId: id, userId });
   }
