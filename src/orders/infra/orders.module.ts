@@ -8,6 +8,10 @@ import { StatusHistoryPrismaRepository } from '@/status-history/infra/database/p
 import { StatusHistoryRepository } from '@/status-history/domain/repositories/status-history.repository';
 import { UserRepository } from '@/users/domain/repositories/user.repository';
 import { OrderRepository } from '../domain/repositories/order.repository';
+import { GetOrderUseCase } from '../app/usecases/get-order.usecase';
+import { ListUserOrdersUseCase } from '../app/usecases/list-user-orders.usecase';
+import { UpdateOrderStatusUseCase } from '../app/usecases/update-order-status.usecase';
+import { DeleteOrderUseCase } from '../app/usecases/delete-order.usecase';
 
 @Module({
   controllers: [OrdersController],
@@ -51,6 +55,54 @@ import { OrderRepository } from '../domain/repositories/order.repository';
         );
       },
       inject: ['OrderRepository', 'UserRepository', 'StatusHistoryRepository'],
+    },
+    {
+      provide: GetOrderUseCase.UseCase,
+      useFactory(
+        orderRepository: OrderRepository.Repository,
+        statusHistoryRepository: StatusHistoryRepository,
+      ) {
+        return new GetOrderUseCase.UseCase(
+          orderRepository,
+          statusHistoryRepository,
+        );
+      },
+      inject: ['OrderRepository', 'StatusHistoryRepository'],
+    },
+    {
+      provide: ListUserOrdersUseCase.UseCase,
+      useFactory(orderRepository: OrderRepository.Repository) {
+        return new ListUserOrdersUseCase.UseCase(orderRepository);
+      },
+      inject: ['OrderRepository'],
+    },
+
+    {
+      provide: UpdateOrderStatusUseCase.UseCase,
+      useFactory(
+        orderRepository: OrderRepository.Repository,
+        statusHistoryRepository: StatusHistoryRepository,
+      ) {
+        return new UpdateOrderStatusUseCase.UseCase(
+          orderRepository,
+          statusHistoryRepository,
+        );
+      },
+      inject: ['OrderRepository', 'StatusHistoryRepository'],
+    },
+
+    {
+      provide: DeleteOrderUseCase.UseCase,
+      useFactory(
+        orderRepository: OrderRepository.Repository,
+        statusHistoryRepository: StatusHistoryRepository,
+      ) {
+        return new DeleteOrderUseCase.UseCase(
+          orderRepository,
+          statusHistoryRepository,
+        );
+      },
+      inject: ['OrderRepository', 'StatusHistoryRepository'],
     },
   ],
 })
