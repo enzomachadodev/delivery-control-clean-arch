@@ -54,17 +54,23 @@ export class UsersController {
   @HttpCode(200)
   @Post('login')
   async login(@Body() signinDto: SigninDto) {
-    return this.signinUseCase.execute(signinDto);
+    const output = await this.signinUseCase.execute(signinDto);
+    return UsersController.userToResponse(output);
   }
 
   @Get('me')
   async profile(@Param('id') id: string) {
-    return this.getUserUseCase.execute({ id });
+    const output = await this.getUserUseCase.execute({ id });
+    return UsersController.userToResponse(output);
   }
 
   @Put(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.updateUserUseCase.execute({ id, ...updateUserDto });
+    const output = await this.updateUserUseCase.execute({
+      id,
+      ...updateUserDto,
+    });
+    return UsersController.userToResponse(output);
   }
 
   @Patch('password/:id')
@@ -72,10 +78,11 @@ export class UsersController {
     @Param('id') id: string,
     @Body() updateUserPasswordDto: UpdateUserPasswordDto,
   ) {
-    return this.updateUserPasswordUseCase.execute({
+    const output = await this.updateUserPasswordUseCase.execute({
       id,
       ...updateUserPasswordDto,
     });
+    return UsersController.userToResponse(output);
   }
 
   @Delete(':id')

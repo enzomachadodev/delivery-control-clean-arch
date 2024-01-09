@@ -24,6 +24,7 @@ import { UserPrismaRepository } from './database/prisma/repositories/user-prisma
       useFactory(prismaService: PrismaService) {
         return new UserPrismaRepository(prismaService);
       },
+      inject: ['PrismaService'],
     },
     {
       provide: 'HashProvider',
