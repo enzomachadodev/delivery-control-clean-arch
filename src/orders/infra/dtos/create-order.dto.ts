@@ -1,8 +1,9 @@
 import { CreateOrderUseCase } from '@/orders/app/usecases/create-order.usecase';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateOrderDto implements CreateOrderUseCase.Input {
   @IsString()
+  @IsUUID()
   @IsNotEmpty()
   userId: string;
 
