@@ -1,6 +1,5 @@
 import { UseCase as DefaultUseCase } from '@/shared/app/usecases/usecase';
 import { OrderRepository } from '@/orders/domain/repositories/order.repository';
-import { StatusHistoryRepository } from '@/status-history/domain/repositories/status-history.repository';
 import { BadRequestError } from '@/shared/app/errors/bad-request-error';
 import { UnauthorizedError } from '@/shared/app/errors/unauthorized-error';
 
@@ -13,10 +12,7 @@ export namespace DeleteOrderUseCase {
   export type Output = void;
 
   export class UseCase implements DefaultUseCase<Input, Output> {
-    constructor(
-      private orderRepository: OrderRepository.Repository,
-      private statusHistoryRepository: StatusHistoryRepository,
-    ) {}
+    constructor(private orderRepository: OrderRepository.Repository) {}
 
     async execute(input: Input): Promise<Output> {
       const { orderId, userId } = input;
@@ -29,7 +25,6 @@ export namespace DeleteOrderUseCase {
       if (orderEntity.userId !== userId)
         throw new UnauthorizedError('Insufficient permission');
 
-      await this.statusHistoryRepository.deleteManyByOrderId(orderId);
       await this.orderRepository.delete(orderId);
     }
   }
