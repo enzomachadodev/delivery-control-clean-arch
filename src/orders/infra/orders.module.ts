@@ -12,8 +12,10 @@ import { GetOrderUseCase } from '../app/usecases/get-order.usecase';
 import { ListUserOrdersUseCase } from '../app/usecases/list-user-orders.usecase';
 import { UpdateOrderStatusUseCase } from '../app/usecases/update-order-status.usecase';
 import { DeleteOrderUseCase } from '../app/usecases/delete-order.usecase';
+import { AuthModule } from '@/auth/infra/auth.module';
 
 @Module({
+  imports: [AuthModule],
   controllers: [OrdersController],
   providers: [
     {
@@ -58,16 +60,10 @@ import { DeleteOrderUseCase } from '../app/usecases/delete-order.usecase';
     },
     {
       provide: GetOrderUseCase.UseCase,
-      useFactory(
-        orderRepository: OrderRepository.Repository,
-        statusHistoryRepository: StatusHistoryRepository,
-      ) {
-        return new GetOrderUseCase.UseCase(
-          orderRepository,
-          statusHistoryRepository,
-        );
+      useFactory(orderRepository: OrderRepository.Repository) {
+        return new GetOrderUseCase.UseCase(orderRepository);
       },
-      inject: ['OrderRepository', 'StatusHistoryRepository'],
+      inject: ['OrderRepository'],
     },
     {
       provide: ListUserOrdersUseCase.UseCase,
@@ -93,16 +89,10 @@ import { DeleteOrderUseCase } from '../app/usecases/delete-order.usecase';
 
     {
       provide: DeleteOrderUseCase.UseCase,
-      useFactory(
-        orderRepository: OrderRepository.Repository,
-        statusHistoryRepository: StatusHistoryRepository,
-      ) {
-        return new DeleteOrderUseCase.UseCase(
-          orderRepository,
-          statusHistoryRepository,
-        );
+      useFactory(orderRepository: OrderRepository.Repository) {
+        return new DeleteOrderUseCase.UseCase(orderRepository);
       },
-      inject: ['OrderRepository', 'StatusHistoryRepository'],
+      inject: ['OrderRepository'],
     },
   ],
 })
