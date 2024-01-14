@@ -12,7 +12,9 @@ export class WrapperDataInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((body) => {
         console.log('Intercepted', body);
-        return !body || 'meta' in body ? body : { data: body };
+        return !body || 'accessToken' in body || 'meta' in body
+          ? body
+          : { data: body };
       }),
     );
   }
