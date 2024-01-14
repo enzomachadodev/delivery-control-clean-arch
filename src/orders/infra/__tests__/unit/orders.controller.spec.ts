@@ -7,6 +7,7 @@ import { OrderStatus } from '@/status-history/domain/entities/status-history.ent
 import { UpdateOrderStatusUseCase } from '@/orders/app/usecases/update-order-status.usecase';
 import { GetOrderUseCase } from '@/orders/app/usecases/get-order.usecase';
 import { randomUUID } from 'node:crypto';
+import { OrderPresenter } from '../../presenters/order.presenter';
 
 describe('OrdersController unit tests', () => {
   let sut: OrdersController;
@@ -54,24 +55,30 @@ describe('OrdersController unit tests', () => {
       state: 'State test',
       zipCode: '36570260',
     };
-    const result = await sut.create(input);
-    expect(output).toMatchObject(result);
+    const presenter = await sut.create(props.userId, input);
+    expect(presenter).toBeInstanceOf(OrderPresenter);
+    expect(presenter).toMatchObject(new OrderPresenter(output));
     expect(mockCreateOrderUseCase.execute).toHaveBeenCalledWith(input);
   });
 
   it('should update a order status', async () => {
-    const output: UpdateOrderStatusUseCase.Output = props;
+    const output: UpdateOrderStatusUseCase.Output = {
+      ...props,
+      currentStatus: OrderStatus.DISPATCHED,
+    };
     const mockUpdateOrderStatusUseCase = {
       execute: jest.fn().mockReturnValue(Promise.resolve(output)),
     };
     sut['updateOrderStatusUseCase'] = mockUpdateOrderStatusUseCase as any;
     const input: UpdateOrderStatusDto = {
-      status: OrderStatus.CONFIRMED,
+      status: OrderStatus.DISPATCHED,
     };
-    const result = await sut.update(id, input);
-    expect(output).toMatchObject(result);
+    const presenter = await sut.update(props.userId, id, input);
+    expect(presenter).toBeInstanceOf(OrderPresenter);
+    expect(presenter).toMatchObject(new OrderPresenter(output));
     expect(mockUpdateOrderStatusUseCase.execute).toHaveBeenCalledWith({
-      id,
+      userId: props.userId,
+      orderId: id,
       ...input,
     });
   });
@@ -82,33 +89,26 @@ describe('OrdersController unit tests', () => {
       execute: jest.fn().mockReturnValue(Promise.resolve(output)),
     };
     sut['deleteOrderUseCase'] = mockDeleteOrderUseCase as any;
-    const result = await sut.remove(id);
+    const result = await sut.remove(props.userId, id);
     expect(output).toStrictEqual(result);
     expect(mockDeleteOrderUseCase.execute).toHaveBeenCalledWith({
-      id,
+      orderId: id,
+      userId: props.userId,
     });
   });
 
   it('should gets a order', async () => {
-    const output: GetOrderUseCase.Output = {
-      ...props,
-      statusHistory: [
-        {
-          id: randomUUID(),
-          status: OrderStatus.CONFIRMED,
-          createdAt: props.createdAt,
-          orderId: props.id,
-        },
-      ],
-    };
-    const mockGetUserUseCase = {
+    const output: GetOrderUseCase.Output = props;
+    const mockGetOrderUseCase = {
       execute: jest.fn().mockReturnValue(Promise.resolve(output)),
     };
-    sut['getUserUseCase'] = mockGetUserUseCase as any;
-    const result = await sut.findOne(id);
-    expect(output).toStrictEqual(result);
-    expect(mockGetUserUseCase.execute).toHaveBeenCalledWith({
+    sut['getOrderUseCase'] = mockGetOrderUseCase as any;
+    const presenter = await sut.findOne(props.userId, id);
+    expect(presenter).toBeInstanceOf(OrderPresenter);
+    expect(presenter).toMatchObject(new OrderPresenter(output));
+    expect(mockGetOrderUseCase.execute).toHaveBeenCalledWith({
       id,
+      userId: props.userId,
     });
   });
 });
