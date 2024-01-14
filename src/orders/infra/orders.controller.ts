@@ -8,6 +8,7 @@ import {
   Delete,
   Inject,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateOrderUseCase } from '../app/usecases/create-order.usecase';
 import { GetOrderUseCase } from '../app/usecases/get-order.usecase';
@@ -22,6 +23,8 @@ import {
 import { OrderOutput } from '../app/dtos/order-output';
 import { OrderPresenter } from './presenters/order.presenter';
 import { OrderCollectionPresenter } from './presenters/order-collection.presenter';
+import { AuthGuard } from '@/auth/infra/auth.guard';
+import { GetUser } from '@/auth/infra/decorator/get-user.decorator';
 
 @Controller('orders')
 export class OrdersController {
@@ -47,10 +50,12 @@ export class OrdersController {
   static listOrdersToResponse(output: ListUserOrdersUseCase.Output) {
     return new OrderCollectionPresenter(output);
   }
-
+  @UseGuards(AuthGuard)
   @Post()
-  async create(@Body() createOrderDto: CreateOrderDto) {
-    const userId = 'string';
+  async create(
+    @GetUser('id') userId: string,
+    @Body() createOrderDto: CreateOrderDto,
+  ) {
     const output = await this.createOrderUseCase.execute({
       ...createOrderDto,
       userId,
@@ -58,9 +63,12 @@ export class OrdersController {
     return OrdersController.orderToResponse(output);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
-  async findByUser(@Query() searchParams: ListUserOrdersDto) {
-    const userId = 'string';
+  async findByUser(
+    @GetUser('id') userId: string,
+    @Query() searchParams: ListUserOrdersDto,
+  ) {
     const output = await this.listUserOrdersUseCase.execute({
       userId,
       ...searchParams,
@@ -68,19 +76,20 @@ export class OrdersController {
     return OrdersController.listOrdersToResponse(output);
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    const userId = 'string';
+  async findOne(@GetUser('id') userId: string, @Param('id') id: string) {
     const output = await this.getOrderUseCase.execute({ id, userId });
     return OrdersController.orderToResponse(output);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   async update(
+    @GetUser('id') userId: string,
     @Param('id') id: string,
     @Body() updateOrderDto: UpdateOrderStatusDto,
   ) {
-    const userId = 'string';
     const output = await this.updateOrderStatusUseCase.execute({
       userId,
       orderId: id,
@@ -89,9 +98,9 @@ export class OrdersController {
     return OrdersController.orderToResponse(output);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    const userId = 'string';
+  async remove(@GetUser('id') userId: string, @Param('id') id: string) {
     return this.deleteOrderUseCase.execute({ orderId: id, userId });
   }
 }

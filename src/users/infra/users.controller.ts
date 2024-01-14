@@ -4,11 +4,11 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   Delete,
   Inject,
   HttpCode,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { SignupDto, UpdateUserDto, UpdateUserPasswordDto } from './dtos';
 import { SignupUseCase } from '../app/usecases/signup.usecase';
@@ -21,6 +21,8 @@ import { SigninDto } from './dtos/signin.dto';
 import { UserOutput } from '../app/dtos/user-output';
 import { UserPresenter } from './presenters/user.presenter';
 import { AuthService } from '@/auth/infra/auth.service';
+import { AuthGuard } from '@/auth/infra/auth.guard';
+import { GetUser } from '@/auth/infra/decorator/get-user.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -61,15 +63,18 @@ export class UsersController {
     const output = await this.signinUseCase.execute(signinDto);
     return this.authService.generateJwt(output.id);
   }
-
+  @UseGuards(AuthGuard)
   @Get('me')
-  async profile(@Param('id') id: string) {
+  async profile(@GetUser('id') id: string) {
     const output = await this.getUserUseCase.execute({ id });
     return UsersController.userToResponse(output);
   }
-
-  @Put(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  @UseGuards(AuthGuard)
+  @Put('me')
+  async update(
+    @GetUser('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     const output = await this.updateUserUseCase.execute({
       id,
       ...updateUserDto,
@@ -77,9 +82,9 @@ export class UsersController {
     return UsersController.userToResponse(output);
   }
 
-  @Patch('password/:id')
+  @Patch('password')
   async updatePassword(
-    @Param('id') id: string,
+    @GetUser('id') id: string,
     @Body() updateUserPasswordDto: UpdateUserPasswordDto,
   ) {
     const output = await this.updateUserPasswordUseCase.execute({
@@ -89,8 +94,8 @@ export class UsersController {
     return UsersController.userToResponse(output);
   }
 
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
+  @Delete('me')
+  async remove(@GetUser('id') id: string) {
     return this.deleteUserUseCase.execute({ id });
   }
 }

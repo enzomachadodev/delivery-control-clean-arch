@@ -6,10 +6,16 @@ import { UsersModule } from './users/infra/users.module';
 import { OrdersModule } from './orders/infra/orders.module';
 import { DatabaseModule } from './shared/infra/database/database.module';
 import { PrismaService } from './shared/infra/database/prisma/prisma.service';
-import { AuthModule } from './auth/infra/auth/auth.module';
+import { AuthModule } from './auth/infra/auth.module';
 
 @Module({
-  imports: [EnvConfigModule, UsersModule, OrdersModule, DatabaseModule, AuthModule],
+  imports: [
+    EnvConfigModule,
+    UsersModule,
+    OrdersModule,
+    DatabaseModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })

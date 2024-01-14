@@ -6,6 +6,12 @@ type GenerateJwtProps = {
   accessToken: string;
 };
 
+type JwtPayload = {
+  id: string;
+  iat: number;
+  exp: number;
+};
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -18,7 +24,7 @@ export class AuthService {
     return { accessToken };
   }
 
-  async verifyJwt(token: string) {
+  async verifyJwt(token: string): Promise<JwtPayload> {
     return this.jwtService.verifyAsync(token, {
       secret: this.configService.getJwtSecret(),
     });
