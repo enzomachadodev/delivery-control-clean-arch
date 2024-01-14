@@ -62,7 +62,6 @@ describe('OrderInMemoryRepository unit tests', () => {
     ];
     const spyFilter = jest.spyOn(items, 'filter');
     const itemsFiltered = await sut['applyFilter'](items, 'TEST');
-    console.log(itemsFiltered, '@@@@@@@2');
     expect(spyFilter).toHaveBeenCalled();
     expect(itemsFiltered).toStrictEqual([items[0], items[1]]);
   });
