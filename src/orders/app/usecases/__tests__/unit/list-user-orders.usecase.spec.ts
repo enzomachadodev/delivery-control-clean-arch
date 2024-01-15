@@ -67,7 +67,7 @@ describe('ListUserOrdersUseCase unit tests', () => {
       ),
     ];
     orderRepository.items = items;
-    const output = await sut.execute({ userId, search: {} });
+    const output = await sut.execute({ userId });
     expect(output).toStrictEqual({
       items: [...items].reverse().map((item) => item.toJSON()),
       total: 2,
@@ -89,13 +89,11 @@ describe('ListUserOrdersUseCase unit tests', () => {
     orderRepository.items = items;
     let output = await sut.execute({
       userId,
-      search: {
-        page: 1,
-        perPage: 2,
-        sort: 'customerName',
-        sortDir: 'asc',
-        filter: 'a',
-      },
+      page: 1,
+      perPage: 2,
+      sort: 'customerName',
+      sortDir: 'asc',
+      filter: 'a',
     });
     expect(output).toStrictEqual({
       items: [items[1].toJSON(), items[2].toJSON()],
@@ -107,13 +105,11 @@ describe('ListUserOrdersUseCase unit tests', () => {
 
     output = await sut.execute({
       userId,
-      search: {
-        page: 2,
-        perPage: 2,
-        sort: 'customerName',
-        sortDir: 'asc',
-        filter: 'a',
-      },
+      page: 2,
+      perPage: 2,
+      sort: 'customerName',
+      sortDir: 'asc',
+      filter: 'a',
     });
     expect(output).toStrictEqual({
       items: [items[0].toJSON()],
@@ -125,13 +121,11 @@ describe('ListUserOrdersUseCase unit tests', () => {
 
     output = await sut.execute({
       userId,
-      search: {
-        page: 1,
-        perPage: 3,
-        sort: 'customerName',
-        sortDir: 'desc',
-        filter: 'a',
-      },
+      page: 1,
+      perPage: 3,
+      sort: 'customerName',
+      sortDir: 'desc',
+      filter: 'a',
     });
     expect(output).toStrictEqual({
       items: [items[0].toJSON(), items[2].toJSON(), items[1].toJSON()],
