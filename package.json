@@ -14,6 +14,7 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "npx dotenv-cli -e .env.test -- jest",
+    "test:int": "npx dotenv-cli -e .env.test -- jest --runInBand --config ./jest.int.config.ts",
     "test:watch": "npm run test --watch",
     "test:staged": "npm run test --findRelatedTests",
     "test:cov": "npm run test --coverage",
