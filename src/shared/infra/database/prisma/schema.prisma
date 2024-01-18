@@ -47,7 +47,7 @@ model Order {
 
   statusHistory StatusHistory[]
 
-  User   User   @relation(fields: [userId], references: [id])
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @db.Uuid
 
   @@map("orders")
@@ -58,7 +58,7 @@ model StatusHistory {
   status    OrderStatus
   createdAt DateTime    @default(now()) @map("created_at")
 
-  Order   Order  @relation(fields: [orderId], references: [id])
+  Order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId String @db.Uuid
 
   @@map("status_history")
