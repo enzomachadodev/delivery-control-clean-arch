@@ -62,7 +62,7 @@ export class OrderPrismaRepository implements OrderRepository.Repository {
   async search(
     props: OrderRepository.SearchParams,
   ): Promise<OrderRepository.SearchResult> {
-    const sortable = this.sortableFields.includes(props.sort) || false;
+    const sortable = this.sortableFields?.includes(props.sort) || false;
     const orderByField = sortable ? props.sort : 'createdAt';
     const orderByDir = sortable ? props.sortDir : 'desc';
 
@@ -95,12 +95,12 @@ export class OrderPrismaRepository implements OrderRepository.Repository {
 
     return new OrderRepository.SearchResult({
       items: models.map((model) => OrderModelMapper.toEntity(model)),
+      total: count,
       currentPage: props.page,
       perPage: props.perPage,
       sort: orderByField,
       sortDir: orderByDir,
       filter: props.filter,
-      total: count,
     });
   }
 
@@ -108,7 +108,7 @@ export class OrderPrismaRepository implements OrderRepository.Repository {
     await this.prismaService.order.create({
       data: {
         ...entity.toJSON(),
-        currentStatus: OrderStatus[entity.currentStatus] as any,
+        currentStatus: OrderStatus[entity.currentStatus] as PrismaOrderStatus,
       },
     });
   }
