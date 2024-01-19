@@ -7,13 +7,7 @@ import { StatusHistoryRepository } from '@/status-history/domain/repositories/st
 import { OrderStatus as PrismaOrderStatus } from '@prisma/client';
 import { StatusHistoryModelMapper } from '../models/status-history-model.mapper';
 
-export class StatusHistoryPrismaRepository
-  implements
-    Omit<
-      StatusHistoryRepository,
-      'update' | 'delete' | 'findAll' | 'findById' | '_get'
-    >
-{
+export class StatusHistoryPrismaRepository implements StatusHistoryRepository {
   constructor(private prismaService: PrismaService) {}
 
   async findByOrderId(orderId: string): Promise<StatusHistoryEntity[]> {
