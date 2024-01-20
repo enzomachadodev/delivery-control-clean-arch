@@ -3,8 +3,8 @@ import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class SigninDto implements SigninUseCase.Input {
   @IsString()
-  @IsEmail()
   @IsNotEmpty()
+  @IsEmail()
   email: string;
 
   @IsString()
