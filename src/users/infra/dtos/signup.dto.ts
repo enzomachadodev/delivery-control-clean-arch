@@ -7,8 +7,8 @@ export class SignupDto implements SignupUseCase.Input {
   name: string;
 
   @IsString()
-  @IsEmail()
   @IsNotEmpty()
+  @IsEmail()
   email: string;
 
   @IsString()
