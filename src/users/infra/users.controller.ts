@@ -95,6 +95,8 @@ export class UsersController {
     return UsersController.userToResponse(output);
   }
 
+  @UseGuards(AuthGuard)
+  @HttpCode(204)
   @Delete('me')
   async remove(@GetUser('id') id: string) {
     return this.deleteUserUseCase.execute({ id });
