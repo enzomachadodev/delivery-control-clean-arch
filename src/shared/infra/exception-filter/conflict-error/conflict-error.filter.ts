@@ -2,7 +2,7 @@ import { ConflictError } from '@/shared/domain/errors/conflict-error';
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
-@Catch()
+@Catch(ConflictError)
 export class ConflictErrorFilter implements ExceptionFilter {
   catch(exception: ConflictError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
