@@ -1,5 +1,4 @@
 import { Reflector } from '@nestjs/core';
-
 import {
   ClassSerializerInterceptor,
   INestApplication,
@@ -11,7 +10,7 @@ import { NotFoundErrorFilter } from './shared/infra/exception-filter/not-found-e
 import { InvalidPasswordErrorFilter } from './shared/infra/exception-filter/invalid-password-error/invalid-password-error.filter';
 import { InvalidCredentialsErrorFilter } from './shared/infra/exception-filter/invalid-credentials-error/invalid-credentials-error.filter';
 
-export async function applyGlobalConfig(app: INestApplication) {
+export const applyGlobalConfig = (app: INestApplication) => {
   app.useGlobalPipes(
     new ValidationPipe({
       errorHttpStatusCode: 422,
@@ -30,4 +29,4 @@ export async function applyGlobalConfig(app: INestApplication) {
     new InvalidPasswordErrorFilter(),
     new InvalidCredentialsErrorFilter(),
   );
-}
+};
