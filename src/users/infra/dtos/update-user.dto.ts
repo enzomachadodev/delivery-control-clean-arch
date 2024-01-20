@@ -1,13 +1,13 @@
 import { UpdateUserUseCase } from '@/users/app/usecases/update-user.usecase';
-import { IsString, IsEmail, IsNotEmpty } from 'class-validator';
+import { IsString, IsEmail, IsOptional } from 'class-validator';
 
 export class UpdateUserDto implements Omit<UpdateUserUseCase.Input, 'id'> {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   name?: string;
 
   @IsString()
   @IsEmail()
-  @IsNotEmpty()
+  @IsOptional()
   email?: string;
 }
