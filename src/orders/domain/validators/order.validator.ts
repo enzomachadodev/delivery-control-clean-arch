@@ -3,12 +3,12 @@ import {
   IsInt,
   IsNotEmpty,
   IsNumber,
+  IsNumberString,
   IsOptional,
   IsPositive,
   IsString,
   IsUUID,
   Length,
-  Matches,
   MaxLength,
   Validate,
   ValidationArguments,
@@ -77,9 +77,8 @@ export class OrderRules {
 
   @IsString()
   @IsNotEmpty()
-  @Matches(/^\d{5}-\d{3}$/, {
-    message: 'zipCode should match the pattern XXXXX-XXX',
-  })
+  @Length(8, 8, { message: 'state must be exactly 8 characters' })
+  @IsNumberString()
   zipCode: string;
 
   @IsNotEmpty()

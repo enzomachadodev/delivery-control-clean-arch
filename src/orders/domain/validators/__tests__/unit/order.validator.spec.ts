@@ -147,14 +147,15 @@ describe('OrderValidator unit tests', () => {
     let isValid = sut.validate({ ...props, zipCode: '' });
     expect(isValid).toBeFalsy();
     expect(sut.errors['zipCode']).toStrictEqual([
-      'zipCode should match the pattern XXXXX-XXX',
+      'zipCode must be a number string',
+      'state must be exactly 8 characters',
       'zipCode should not be empty',
     ]);
 
     isValid = sut.validate({ ...props, zipCode: '12345' });
     expect(isValid).toBeFalsy();
     expect(sut.errors['zipCode']).toStrictEqual([
-      'zipCode should match the pattern XXXXX-XXX',
+      'state must be exactly 8 characters',
     ]);
   });
 
