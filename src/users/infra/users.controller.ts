@@ -82,6 +82,7 @@ export class UsersController {
     return UsersController.userToResponse(output);
   }
 
+  @UseGuards(AuthGuard)
   @Patch('password')
   async updatePassword(
     @GetUser('id') id: string,
