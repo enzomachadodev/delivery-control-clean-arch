@@ -5,29 +5,13 @@ import {
   IsString,
   IsUUID,
   Validate,
-  ValidationArguments,
-  ValidatorConstraint,
-  ValidatorConstraintInterface,
 } from 'class-validator';
 import { ClassValidatorFields } from '@/shared/domain/validators/class-validator-fields';
 import {
   OrderStatus,
   StatusHistoryProps,
 } from '../entities/status-history.entity';
-
-@ValidatorConstraint({ name: 'IsOrderStatus', async: false })
-export class IsOrderStatusHistoryValidator
-  implements ValidatorConstraintInterface
-{
-  // eslint-disable-next-line
-  validate(name: any, args: ValidationArguments) {
-    return Object.values(OrderStatus).includes(name);
-  }
-
-  defaultMessage(args: ValidationArguments) {
-    return `${args.property} must be a OrderStatus`;
-  }
-}
+import { IsOrderStatusHistoryValidator } from '@/orders/domain/validators/order.validator';
 
 export class StatusRules {
   @IsString()
