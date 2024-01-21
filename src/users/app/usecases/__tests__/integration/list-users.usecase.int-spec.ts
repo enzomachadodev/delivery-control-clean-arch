@@ -35,7 +35,6 @@ describe('ListUsersUseCase integration tests', () => {
     const model = await prismaService.user.create({
       data: entity.toJSON(),
     });
-    console.log(model);
 
     const output = await sut.execute();
 
