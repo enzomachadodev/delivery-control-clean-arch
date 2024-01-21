@@ -23,7 +23,9 @@ import { UserPresenter } from './presenters/user.presenter';
 import { AuthService } from '@/auth/infra/auth.service';
 import { AuthGuard } from '@/auth/infra/auth.guard';
 import { GetUser } from '@/auth/infra/decorator/get-user.decorator';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   @Inject(SignupUseCase.UseCase)
@@ -51,24 +53,67 @@ export class UsersController {
     return new UserPresenter(output);
   }
 
+  @ApiResponse({
+    status: 409,
+    description: 'Email conflict',
+  })
+  @ApiResponse({
+    status: 422,
+    description: 'Request body with invalid data',
+  })
   @Post()
   async create(@Body() signupDto: SignupDto) {
     const output = await this.signupUseCase.execute(signupDto);
     return UsersController.userToResponse(output);
   }
 
+  @ApiResponse({
+    status: 200,
+    schema: {
+      type: 'object',
+      properties: {
+        accessToken: {
+          type: 'string',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 422,
+    description: 'Request body with invalid data',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid credentials',
+  })
   @HttpCode(200)
   @Post('login')
   async login(@Body() signinDto: SigninDto) {
     const output = await this.signinUseCase.execute(signinDto);
     return this.authService.generateJwt(output.id);
   }
+
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized access',
+  })
   @UseGuards(AuthGuard)
   @Get('me')
   async profile(@GetUser('id') id: string) {
     const output = await this.getUserUseCase.execute({ id });
     return UsersController.userToResponse(output);
   }
+
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 422,
+    description: 'Request body with invalid data',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized access',
+  })
   @UseGuards(AuthGuard)
   @Put('me')
   async update(
@@ -82,6 +127,15 @@ export class UsersController {
     return UsersController.userToResponse(output);
   }
 
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 422,
+    description: 'Request body with invalid data',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized access',
+  })
   @UseGuards(AuthGuard)
   @Patch('password')
   async updatePassword(
@@ -95,6 +149,15 @@ export class UsersController {
     return UsersController.userToResponse(output);
   }
 
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 204,
+    description: 'Deletion confirmation response',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized access',
+  })
   @UseGuards(AuthGuard)
   @HttpCode(204)
   @Delete('me')

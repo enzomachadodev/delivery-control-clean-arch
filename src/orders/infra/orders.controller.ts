@@ -26,7 +26,14 @@ import { OrderPresenter } from './presenters/order.presenter';
 import { OrderCollectionPresenter } from './presenters/order-collection.presenter';
 import { AuthGuard } from '@/auth/infra/auth.guard';
 import { GetUser } from '@/auth/infra/decorator/get-user.decorator';
+import {
+  ApiBearerAuth,
+  ApiResponse,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger';
 
+@ApiTags('orders')
 @Controller('orders')
 export class OrdersController {
   @Inject(CreateOrderUseCase.UseCase)
@@ -51,6 +58,16 @@ export class OrdersController {
   static listOrdersToResponse(output: ListUserOrdersUseCase.Output) {
     return new OrderCollectionPresenter(output);
   }
+
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized access',
+  })
+  @ApiResponse({
+    status: 422,
+    description: 'Request body with invalid data',
+  })
   @UseGuards(AuthGuard)
   @Post()
   async createOrder(
@@ -64,6 +81,44 @@ export class OrdersController {
     return OrdersController.orderToResponse(output);
   }
 
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    schema: {
+      type: 'object',
+      properties: {
+        meta: {
+          type: 'object',
+          properties: {
+            total: {
+              type: 'number',
+            },
+            currentPage: {
+              type: 'number',
+            },
+            lastPage: {
+              type: 'number',
+            },
+            perPage: {
+              type: 'number',
+            },
+          },
+        },
+        data: {
+          type: 'array',
+          items: { $ref: getSchemaPath(OrderPresenter) },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 422,
+    description: 'Invalid query params',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized access',
+  })
   @UseGuards(AuthGuard)
   @Get()
   async findByUser(
@@ -77,6 +132,15 @@ export class OrdersController {
     return OrdersController.listOrdersToResponse(output);
   }
 
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 404,
+    description: 'Id not found',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized access',
+  })
   @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@GetUser('id') userId: string, @Param('id') id: string) {
@@ -84,6 +148,19 @@ export class OrdersController {
     return OrdersController.orderToResponse(output);
   }
 
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 422,
+    description: 'Request body with invalid data',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Id not found',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized access',
+  })
   @UseGuards(AuthGuard)
   @Patch(':id')
   async update(
@@ -99,6 +176,15 @@ export class OrdersController {
     return OrdersController.orderToResponse(output);
   }
 
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 404,
+    description: 'Id not found',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized access',
+  })
   @UseGuards(AuthGuard)
   @HttpCode(204)
   @Delete(':id')
