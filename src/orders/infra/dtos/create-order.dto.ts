@@ -1,5 +1,14 @@
 import { CreateOrderUseCase } from '@/orders/app/usecases/create-order.usecase';
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsNumberString,
+  IsOptional,
+  IsString,
+  IsUUID,
+  IsUppercase,
+  Length,
+} from 'class-validator';
 
 export class CreateOrderDto implements CreateOrderUseCase.Input {
   @IsString()
@@ -15,7 +24,7 @@ export class CreateOrderDto implements CreateOrderUseCase.Input {
   @IsNotEmpty()
   street: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   number: number;
 
@@ -33,9 +42,13 @@ export class CreateOrderDto implements CreateOrderUseCase.Input {
 
   @IsString()
   @IsNotEmpty()
+  @Length(2)
+  @IsUppercase()
   state: string;
 
   @IsString()
   @IsNotEmpty()
+  @Length(8)
+  @IsNumberString()
   zipCode: string;
 }
