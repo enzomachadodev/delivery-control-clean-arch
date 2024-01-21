@@ -55,7 +55,7 @@ describe('OrdersController unit tests', () => {
       state: 'State test',
       zipCode: '36570260',
     };
-    const presenter = await sut.create(props.userId, input);
+    const presenter = await sut.createOrder(props.userId, input);
     expect(presenter).toBeInstanceOf(OrderPresenter);
     expect(presenter).toMatchObject(new OrderPresenter(output));
     expect(mockCreateOrderUseCase.execute).toHaveBeenCalledWith(input);

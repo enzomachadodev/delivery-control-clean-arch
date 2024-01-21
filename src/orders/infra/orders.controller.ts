@@ -52,7 +52,7 @@ export class OrdersController {
   }
   @UseGuards(AuthGuard)
   @Post()
-  async create(
+  async createOrder(
     @GetUser('id') userId: string,
     @Body() createOrderDto: CreateOrderDto,
   ) {
