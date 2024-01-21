@@ -9,6 +9,7 @@ import {
   Inject,
   Query,
   UseGuards,
+  HttpCode,
 } from '@nestjs/common';
 import { CreateOrderUseCase } from '../app/usecases/create-order.usecase';
 import { GetOrderUseCase } from '../app/usecases/get-order.usecase';
@@ -99,6 +100,7 @@ export class OrdersController {
   }
 
   @UseGuards(AuthGuard)
+  @HttpCode(204)
   @Delete(':id')
   async remove(@GetUser('id') userId: string, @Param('id') id: string) {
     return this.deleteOrderUseCase.execute({ orderId: id, userId });
