@@ -52,10 +52,7 @@ describe('ListUserOrdersUseCase integration tests', () => {
       );
     });
     await prismaService.order.createMany({
-      data: entities.map((item) => ({
-        ...item.toJSON(),
-        currentStatus: OrderStatus[item.currentStatus] as PrismaOrderStatus,
-      })),
+      data: entities.map((item) => item.toJSON()),
     });
 
     const output = await sut.execute({ userId: userEntity._id });

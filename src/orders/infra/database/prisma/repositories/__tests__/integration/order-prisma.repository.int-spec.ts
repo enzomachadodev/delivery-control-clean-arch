@@ -1,4 +1,4 @@
-import { OrderStatus as PrismaOrderStatus, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { OrderStatus } from '@/status-history/domain/entities/status-history.entity';
 import { OrderPrismaRepository } from '../../order-prisma.repository';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -46,12 +46,7 @@ describe('OrderPrismaRepository integration tests', () => {
     );
 
     const newOrder = await prismaService.order.create({
-      data: {
-        ...orderEntity.toJSON(),
-        currentStatus: OrderStatus[
-          orderEntity.currentStatus
-        ] as PrismaOrderStatus,
-      },
+      data: orderEntity.toJSON(),
     });
 
     const output = await sut.findById(newOrder.id);
@@ -74,10 +69,7 @@ describe('OrderPrismaRepository integration tests', () => {
       },
     });
 
-    expect(result).toStrictEqual({
-      ...orderEntity.toJSON(),
-      currentStatus: 'CONFIRMED',
-    });
+    expect(result).toStrictEqual(orderEntity.toJSON());
   });
 
   it('should returns all orders', async () => {
@@ -89,12 +81,7 @@ describe('OrderPrismaRepository integration tests', () => {
       OrderDataBuilder({ userId: userEntity._id }),
     );
     await prismaService.order.create({
-      data: {
-        ...orderEntity.toJSON(),
-        currentStatus: OrderStatus[
-          orderEntity.currentStatus
-        ] as PrismaOrderStatus,
-      },
+      data: orderEntity.toJSON(),
     });
 
     const entities = await sut.findAll();
@@ -122,12 +109,7 @@ describe('OrderPrismaRepository integration tests', () => {
       OrderDataBuilder({ userId: userEntity._id }),
     );
     await prismaService.order.create({
-      data: {
-        ...orderEntity.toJSON(),
-        currentStatus: OrderStatus[
-          orderEntity.currentStatus
-        ] as PrismaOrderStatus,
-      },
+      data: orderEntity.toJSON(),
     });
     orderEntity.updateStatus(OrderStatus.DISPATCHED);
     await sut.update(orderEntity);
@@ -162,12 +144,7 @@ describe('OrderPrismaRepository integration tests', () => {
       OrderDataBuilder({ userId: userEntity._id }),
     );
     await prismaService.order.create({
-      data: {
-        ...orderEntity.toJSON(),
-        currentStatus: OrderStatus[
-          orderEntity.currentStatus
-        ] as PrismaOrderStatus,
-      },
+      data: orderEntity.toJSON(),
     });
     await sut.delete(orderEntity._id);
 
@@ -202,10 +179,7 @@ describe('OrderPrismaRepository integration tests', () => {
       });
 
       await prismaService.order.createMany({
-        data: entities.map((item) => ({
-          ...item.toJSON(),
-          currentStatus: OrderStatus[item.currentStatus] as PrismaOrderStatus,
-        })),
+        data: entities.map((item) => item.toJSON()),
       });
 
       const searchOutput = await sut.search(new OrderRepository.SearchParams());
@@ -244,10 +218,7 @@ describe('OrderPrismaRepository integration tests', () => {
       });
 
       await prismaService.order.createMany({
-        data: entities.map((item) => ({
-          ...item.toJSON(),
-          currentStatus: OrderStatus[item.currentStatus] as PrismaOrderStatus,
-        })),
+        data: entities.map((item) => item.toJSON()),
       });
 
       const searchOutputPage1 = await sut.search(
@@ -305,10 +276,7 @@ describe('OrderPrismaRepository integration tests', () => {
       });
 
       await prismaService.order.createMany({
-        data: entities.map((item) => ({
-          ...item.toJSON(),
-          currentStatus: OrderStatus[item.currentStatus] as PrismaOrderStatus,
-        })),
+        data: entities.map((item) => item.toJSON()),
       });
 
       const searchOutputPage1 = await sut.findByUserId(

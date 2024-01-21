@@ -106,10 +106,7 @@ export class OrderPrismaRepository implements OrderRepository.Repository {
 
   async insert(entity: OrderEntity): Promise<void> {
     await this.prismaService.order.create({
-      data: {
-        ...entity.toJSON(),
-        currentStatus: OrderStatus[entity.currentStatus] as PrismaOrderStatus,
-      },
+      data: entity.toJSON(),
     });
   }
 
@@ -125,10 +122,7 @@ export class OrderPrismaRepository implements OrderRepository.Repository {
   async update(entity: OrderEntity): Promise<void> {
     await this._get(entity._id);
     await this.prismaService.order.update({
-      data: {
-        ...entity.toJSON(),
-        currentStatus: OrderStatus[entity.currentStatus] as PrismaOrderStatus,
-      },
+      data: entity.toJSON(),
       where: {
         id: entity._id,
       },

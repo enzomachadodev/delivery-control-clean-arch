@@ -1,7 +1,7 @@
 import { DatabaseModule } from '@/shared/infra/database/database.module';
 import { setupPrismaTests } from '@/shared/infra/database/prisma/testing/setup-prisma-tests';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaClient, OrderStatus as PrismaOrderStatus } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { NotFoundError } from '@/shared/domain/errors/not-found-error';
 import { UserEntity } from '@/users/domain/entities/user.entity';
 import { UserDataBuilder } from '@/users/domain/testing/helpers/user-data-builder';
@@ -64,12 +64,7 @@ describe('UpdateOrderStatusUseCase integration tests', () => {
       OrderDataBuilder({ userId: userEntity._id }),
     );
     await prismaService.order.create({
-      data: {
-        ...orderEntity.toJSON(),
-        currentStatus: OrderStatus[
-          orderEntity.currentStatus
-        ] as PrismaOrderStatus,
-      },
+      data: orderEntity.toJSON(),
     });
 
     const output = await sut.execute({

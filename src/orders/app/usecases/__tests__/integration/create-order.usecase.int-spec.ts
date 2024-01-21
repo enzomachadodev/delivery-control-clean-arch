@@ -55,10 +55,11 @@ describe('CreateOrderUseCase integration tests', () => {
       neighborhood: 'neighborhood test',
       city: 'test city',
       state: 'DF',
-      zipCode: '36570-000',
+      zipCode: '36570000',
     };
     const output = await sut.execute(props);
     expect(output.id).toBeDefined();
+    expect(output.currentStatus).toEqual('CONFIRMED');
     expect(output.createdAt).toBeInstanceOf(Date);
   });
 });

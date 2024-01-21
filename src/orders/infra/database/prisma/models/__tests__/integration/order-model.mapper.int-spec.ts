@@ -1,14 +1,11 @@
-import {
-  Order,
-  OrderStatus as PrismaOrderStatus,
-  PrismaClient,
-} from '@prisma/client';
+import { Order, PrismaClient } from '@prisma/client';
 import { OrderModelMapper } from '../../order-model.mapper';
 import { ValidationError } from '@/shared/domain/errors/validation-error';
 import { setupPrismaTests } from '@/shared/infra/database/prisma/testing/setup-prisma-tests';
 import { OrderEntity } from '@/orders/domain/entities/order.entity';
 import { UserEntity } from '@/users/domain/entities/user.entity';
 import { UserDataBuilder } from '@/users/domain/testing/helpers/user-data-builder';
+import { OrderStatus } from '@/status-history/domain/entities/status-history.entity';
 
 describe('OrderModelMapper integration tests', () => {
   let prismaService: PrismaClient;
@@ -31,14 +28,14 @@ describe('OrderModelMapper integration tests', () => {
       id,
       userId: userEntity._id,
       customerName: 'John Doe',
-      currentStatus: PrismaOrderStatus.CONFIRMED,
+      currentStatus: OrderStatus.CONFIRMED,
       street: 'Street test',
       number: 1234,
       complement: 'Complement test',
       neighborhood: 'Neighborhood test',
       city: 'City test',
       state: 'ST',
-      zipCode: '36570-260',
+      zipCode: '36570260',
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -53,12 +50,12 @@ describe('OrderModelMapper integration tests', () => {
     expect(() => OrderModelMapper.toEntity(model)).toThrow(ValidationError);
   });
 
-  it('should convert a user model to a user entity', async () => {
+  it('should convert a user model to a order entity', async () => {
     const model: Order = await prismaService.order.create({
       data: props,
     });
     const sut = OrderModelMapper.toEntity(model);
     expect(sut).toBeInstanceOf(OrderEntity);
-    expect(sut.toJSON()).toStrictEqual({ ...props, currentStatus: 0 });
+    expect(sut.toJSON()).toStrictEqual(props);
   });
 });

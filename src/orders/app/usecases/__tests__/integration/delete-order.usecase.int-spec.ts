@@ -52,12 +52,7 @@ describe('DeleteOrderUseCase integration tests', () => {
       OrderDataBuilder({ userId: userEntity._id }),
     );
     await prismaService.order.create({
-      data: {
-        ...orderEntity.toJSON(),
-        currentStatus: OrderStatus[
-          orderEntity.currentStatus
-        ] as PrismaOrderStatus,
-      },
+      data: orderEntity.toJSON(),
     });
 
     await sut.execute({ orderId: orderEntity._id, userId: userEntity._id });

@@ -1,5 +1,6 @@
 import { StatusHistoryDataBuilder } from '@/status-history/domain/testing/helpers/status-history-data-builder';
 import {
+  OrderStatus,
   StatusHistoryEntity,
   StatusHistoryProps,
 } from '../../status-history.entity';
@@ -22,7 +23,7 @@ describe('StatusHistoryEntity unit tests', () => {
   it('Getter of status field', () => {
     expect(sut.status).toBeDefined();
     expect(sut.status).toEqual(props.status);
-    expect(typeof sut.status).toBe('number');
+    expect(OrderStatus).toHaveProperty(sut.status);
   });
 
   it('Getter of orderId field', () => {

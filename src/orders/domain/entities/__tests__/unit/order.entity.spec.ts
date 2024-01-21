@@ -85,7 +85,7 @@ describe('OrderEntity unit tests', () => {
   it('Getter of currentStatus field', () => {
     expect(sut.currentStatus).toBeDefined();
     expect(sut.currentStatus).toEqual(props.currentStatus);
-    expect(typeof sut.currentStatus).toBe('number');
+    expect(OrderStatus).toHaveProperty(sut.currentStatus);
   });
 
   it('Getter of createdAt field', () => {

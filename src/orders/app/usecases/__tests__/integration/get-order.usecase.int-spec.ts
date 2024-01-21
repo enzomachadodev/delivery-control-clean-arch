@@ -1,4 +1,4 @@
-import { PrismaClient, OrderStatus as PrismaOrderStatus } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { GetOrderUseCase } from '../../get-order.usecase';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setupPrismaTests } from '@/shared/infra/database/prisma/testing/setup-prisma-tests';
@@ -9,7 +9,6 @@ import { UserEntity } from '@/users/domain/entities/user.entity';
 import { UserDataBuilder } from '@/users/domain/testing/helpers/user-data-builder';
 import { OrderEntity } from '@/orders/domain/entities/order.entity';
 import { OrderDataBuilder } from '@/orders/domain/testing/helpers/order-data-builder';
-import { OrderStatus } from '@/status-history/domain/entities/status-history.entity';
 
 describe('GetOrderUseCase integration tests', () => {
   const prismaService = new PrismaClient();
@@ -52,12 +51,7 @@ describe('GetOrderUseCase integration tests', () => {
       OrderDataBuilder({ userId: userEntity._id }),
     );
     const model = await prismaService.order.create({
-      data: {
-        ...orderEntity.toJSON(),
-        currentStatus: OrderStatus[
-          orderEntity.currentStatus
-        ] as PrismaOrderStatus,
-      },
+      data: orderEntity.toJSON(),
     });
 
     const output = await sut.execute({
@@ -65,6 +59,6 @@ describe('GetOrderUseCase integration tests', () => {
       userId: userEntity._id,
     });
 
-    expect(output).toMatchObject({ ...model, currentStatus: 0 });
+    expect(output).toMatchObject(model);
   });
 });

@@ -50,7 +50,7 @@ describe('OrderPresenter unit tests', () => {
       id: 'e71c52a2-9710-4a96-a08e-144af4209b5d',
       userId: props.userId,
       customerName: 'John Doe',
-      currentStatus: OrderStatus[0],
+      currentStatus: props.currentStatus,
       street: 'Street test',
       number: 1234,
       complement: 'Complement test',

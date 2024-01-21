@@ -3,11 +3,11 @@ import { EntityValidationError } from '@/shared/domain/errors/validation-error';
 import { StatusHistoryValidatorFactory } from '../validators/status-history.validator';
 
 export enum OrderStatus {
-  CONFIRMED,
-  PROCESSING,
-  DISPATCHED,
-  DELIVERED,
-  CANCELED,
+  CONFIRMED = 'CONFIRMED',
+  PROCESSING = 'PROCESSING',
+  DISPATCHED = 'DISPATCHED',
+  DELIVERED = 'DELIVERED',
+  CANCELED = 'CANCELED',
 }
 
 export type StatusHistoryProps = {
