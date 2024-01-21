@@ -7,13 +7,13 @@ import { EnvConfigModule } from '@/shared/infra/env-config/env-config.module';
 
 describe('AuthService unit tests', () => {
   let sut: AuthService;
+  //eslint-disable-next-line
   let module: TestingModule;
   let jwtService: JwtService;
   let envConfigService: EnvConfigService;
   let configService: ConfigService;
 
   beforeAll(async () => {
-    console.log(module);
     module = await Test.createTestingModule({
       imports: [EnvConfigModule, JwtModule],
       providers: [AuthService],
