@@ -45,7 +45,6 @@ describe('OrdersController unit tests', () => {
     };
     sut['createOrderUseCase'] = mockCreateOrderUseCase as any;
     const input: CreateOrderDto = {
-      userId: props.userId,
       customerName: 'John Doe',
       street: 'Street test',
       number: 1234,
@@ -58,7 +57,10 @@ describe('OrdersController unit tests', () => {
     const presenter = await sut.createOrder(props.userId, input);
     expect(presenter).toBeInstanceOf(OrderPresenter);
     expect(presenter).toMatchObject(new OrderPresenter(output));
-    expect(mockCreateOrderUseCase.execute).toHaveBeenCalledWith(input);
+    expect(mockCreateOrderUseCase.execute).toHaveBeenCalledWith({
+      ...input,
+      userId: props.userId,
+    });
   });
 
   it('should update a order status', async () => {

@@ -53,7 +53,6 @@ describe('OrdersController e2e tests', () => {
 
   beforeEach(async () => {
     createOrderDto = {
-      userId: '54566256-9be1-44de-9a5a-20404bf4fe2f',
       customerName: 'John Doe',
       street: 'Street test',
       number: 1234,
@@ -103,9 +102,6 @@ describe('OrdersController e2e tests', () => {
         .expect(422);
       expect(res.body.error).toBe('Unprocessable Entity');
       expect(res.body.message).toEqual([
-        'userId should not be empty',
-        'userId must be a UUID',
-        'userId must be a string',
         'customerName should not be empty',
         'customerName must be a string',
         'street should not be empty',
