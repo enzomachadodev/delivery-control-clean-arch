@@ -19,7 +19,7 @@ describe('ListUsersUseCase unit tests', () => {
     repository.items = items;
     const output = await sut.execute();
     expect(output).toHaveLength(2);
-    expect(output[0]).toStrictEqual(user1);
-    expect(output[1]).toStrictEqual(user2);
+    expect(output[0]).toStrictEqual(user1.toJSON());
+    expect(output[1]).toStrictEqual(user2.toJSON());
   });
 });
