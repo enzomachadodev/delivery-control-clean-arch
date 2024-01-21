@@ -77,7 +77,7 @@ export class OrderRules {
 
   @IsString()
   @IsNotEmpty()
-  @Length(8, 8, { message: 'state must be exactly 8 characters' })
+  @Length(8, 8, { message: 'zipCode must be exactly 8 characters' })
   @IsNumberString()
   zipCode: string;
 
