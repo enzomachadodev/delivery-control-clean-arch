@@ -6,6 +6,8 @@
 
 Bem-vindo ao Projeto Delivery Control com Clean Architecture! Este é um projeto desenvolvido para ir além do básico CRUD, explorando conceitos avançados de arquitetura de software e tecnologias modernas. Meu principal objetivo era adquirir uma compreensão prática de como aplicar Clean Architecture, SOLID, DDD e Design Patterns. Ao moldar a aplicação, concentrei-me na separação de responsabilidades e na adoção de padrões de design para cenários de uso reais.
 
+A aplicação desempenha um papel no suporte a um sistema de pedidos, possibilitando que usuários cadastrados adicionem pedidos, atualizem seus status e consultem um histórico completo de atualizações. No entanto, meu enfoque não foi apenas criar uma API; busquei desenvolver um código resiliente, escalável e de fácil manutenção.
+
 A seguir, você encontrará informações sobre os requisitos, como rodar o projeto com Docker e as tecnologias utilizadas.
 
 
